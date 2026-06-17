@@ -108,6 +108,30 @@ describe('game', () => {
     expect(result.captured.green).toEqual([]);
   });
 
+  it('持ち駒のひよこを相手陣地に置いても成らない', () => {
+    const state = {
+      ...startGame(createInitialGameState()),
+      board: [
+        [null, null, null],
+        [null, null, null],
+        [null, null, null],
+        [null, null, null],
+      ],
+      currentPlayer: 'green' as const,
+      phase: 'havePieceSelect' as const,
+      selectedPosition: null,
+      highlightedPositions: [{ row: 0, col: 1 }],
+      captured: { blue: [], green: ['chick'] },
+      placingPiece: 'chick' as const,
+      winner: null,
+    };
+
+    const result = selectBoardSquare(state, { row: 0, col: 1 });
+
+    expect(result.board[0][1]).toEqual({ kind: 'chick', owner: 'green' });
+    expect(result.captured.green).toEqual([]);
+  });
+
   it('選択中の駒を再度クリックすると選択解除される', () => {
     const state = startGame(createInitialGameState());
     const selected = selectBoardSquare(state, { row: 3, col: 2 });

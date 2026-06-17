@@ -145,7 +145,9 @@ export function applyMove(board: Board, move: Move, player: Player): Board {
   nextBoard = setCell(
     nextBoard,
     move.to,
-    maybePromote(movingPiece, move.to.row),
+    move.from === null
+      ? movingPiece
+      : maybePromote(movingPiece, move.to.row),
   );
 
   return nextBoard;
