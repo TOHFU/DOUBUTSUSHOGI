@@ -1,12 +1,12 @@
 import { expect, test } from 'vitest';
 import { render } from 'vitest-browser-react';
 
-import { HomePage } from './HomePage';
+import { GameScreen } from './GameScreen';
 
-test('HomePageの見た目', async () => {
-  const view = await render(<HomePage />);
+test('GameScreenの見た目', async () => {
+  const view = await render(<GameScreen />);
 
   await expect
-    .element(view.getByRole('heading', { name: 'DOUBUTSUSHOGI' }))
+    .element(view.getByRole('button', { name: 'ゲームを開始' }))
     .toBeVisible();
 });
