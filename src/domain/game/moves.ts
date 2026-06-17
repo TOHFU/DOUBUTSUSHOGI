@@ -167,21 +167,6 @@ export function findLion(board: Board, player: Player): Position | null {
   return null;
 }
 
-export function hasLegalMoves(board: Board, player: Player): boolean {
-  for (let row = 0; row < BOARD_ROWS; row += 1) {
-    for (let col = 0; col < BOARD_COLS; col += 1) {
-      const position = { row, col };
-      const piece = getCell(board, position);
-
-      if (piece?.owner === player && getMovesForPiece(board, position).length > 0) {
-        return true;
-      }
-    }
-  }
-
-  return false;
-}
-
 export function isPositionInList(
   position: Position,
   list: Position[],
