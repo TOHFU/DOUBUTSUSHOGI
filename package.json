@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "download-figma": "node scripts/download-figma-assets.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:visual": "vitest run --config vitest.visual.config.ts",

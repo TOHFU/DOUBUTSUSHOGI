@@ -1,12 +1,17 @@
 import { expect, test } from '@playwright/test';
 
-test('トップページにタイトルが表示される', async ({ page }) => {
+test('トップページにゲーム開始画面が表示される', async ({ page }) => {
   await page.goto('/');
 
   await expect(
-    page.getByRole('heading', { name: 'DOUBUTSUSHOGI' }),
+    page.getByRole('button', { name: 'ゲームを開始' }),
   ).toBeVisible();
-  await expect(
-    page.getByText('動物将棋のオンライン対戦プラットフォーム'),
-  ).toBeVisible();
+});
+
+test('ゲーム開始後に将棋盤が表示される', async ({ page }) => {
+  await page.goto('/');
+
+  await page.getByRole('button', { name: 'ゲームを開始' }).click();
+
+  await expect(page.getByRole('grid', { name: '将棋盤' })).toBeVisible();
 });
