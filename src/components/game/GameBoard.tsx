@@ -1,5 +1,4 @@
-import Image from 'next/image';
-
+import { GameImage } from '@/components/game/GameImage';
 import { GamePiece } from '@/components/game/GamePiece';
 import { UI_ASSETS } from '@/components/game/assets';
 import { GAME_LAYOUT, gameSize } from '@/components/game/gameLayout';
@@ -27,8 +26,9 @@ function BoardSquare({
   return (
     <button
       type="button"
-      aria-label={`マス ${position.row + 1}-${position.col + 1}`}
-      aria-pressed={isSelected}
+      role="gridcell"
+      aria-label={`${position.row + 1}行${position.col + 1}列`}
+      aria-selected={isSelected || isHighlighted || undefined}
       onClick={() => onSelect(position)}
       className="relative shrink-0 border-0 bg-transparent p-0"
       style={{ width: cellSize, height: cellSize }}
@@ -41,13 +41,12 @@ function BoardSquare({
         />
       ) : null}
       {showSelect ? (
-        <Image
+        <GameImage
           src={UI_ASSETS.select}
           alt=""
           aria-hidden
           width={100}
           height={100}
-          unoptimized
           className="pointer-events-none absolute inset-0 z-20 size-full"
         />
       ) : null}
@@ -78,11 +77,7 @@ export function GameBoard({
         height: gameSize(boardLayout.height),
       }}
     >
-      <div
-        className="relative grid grid-cols-3 grid-rows-4"
-        role="grid"
-        aria-label="将棋盤"
-      >
+      <div className="relative grid grid-cols-3 grid-rows-4" role="grid" aria-label="将棋盤">
         {board.map((row, rowIndex) =>
           row.map((piece, colIndex) => {
             const position = { row: rowIndex, col: colIndex };

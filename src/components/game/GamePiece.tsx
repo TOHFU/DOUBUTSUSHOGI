@@ -1,9 +1,9 @@
-import Image from 'next/image';
-
+import { GameImage } from '@/components/game/GameImage';
 import {
   getPieceImagePath,
   getTransparentPieceImagePath,
 } from '@/components/game/assets';
+import { getPieceAccessibleName } from '@/components/game/pieceLabels';
 import type { PieceKind, Player } from '@/domain/game/types';
 
 interface GamePieceProps {
@@ -27,12 +27,11 @@ export function GamePiece({
       : getPieceImagePath(kind, owner);
 
   return (
-    <Image
+    <GameImage
       src={src}
-      alt={`${owner} ${kind}`}
+      alt={getPieceAccessibleName(kind, owner)}
       width={size}
       height={size}
-      unoptimized
       className={`${owner === 'blue' ? 'rotate-180' : ''} object-contain ${className ?? ''}`}
       draggable={false}
     />

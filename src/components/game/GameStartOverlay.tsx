@@ -1,5 +1,4 @@
-import Image from 'next/image';
-
+import { GameImage } from '@/components/game/GameImage';
 import { UI_ASSETS } from '@/components/game/assets';
 import { GAME_LAYOUT, gameSize } from '@/components/game/gameLayout';
 
@@ -18,12 +17,11 @@ export function GameStartOverlay({ onStart }: GameStartOverlayProps) {
       onClick={onStart}
       className="absolute inset-0 z-30 flex items-center justify-center bg-white/20"
     >
-      <Image
+      <GameImage
         src={UI_ASSETS.gameStartOverlay}
         alt="GAME START"
         width={gameStart.width}
         height={gameStart.height}
-        unoptimized
         className="pointer-events-none h-auto max-w-[90vw]"
         style={{ width: gameSize(gameStart.width) }}
         priority

@@ -1,7 +1,7 @@
-import Image from 'next/image';
-
+import { GameImage } from '@/components/game/GameImage';
 import { GamePiece } from '@/components/game/GamePiece';
 import { UI_ASSETS } from '@/components/game/assets';
+import { getPieceLabel, getPlayerLabel } from '@/components/game/pieceLabels';
 import { GAME_LAYOUT, gameSize } from '@/components/game/gameLayout';
 import type { PieceKind, Player } from '@/domain/game/types';
 
@@ -25,20 +25,20 @@ export function PlayerArea({
   const isBlue = player === 'blue';
   const layout = GAME_LAYOUT.playerArea;
   const capturedLayout = layout.captured;
+  const teamLabel = getPlayerLabel(player);
 
   return (
     <div
       className={`relative w-full mix-blend-darken ${className ?? ''}`}
       style={{ height: gameSize(GAME_LAYOUT.playerAreaHeight) }}
-      aria-label={isBlue ? 'あおチーム' : 'みどりチーム'}
+      aria-label={`${teamLabel}チーム`}
     >
-      <Image
+      <GameImage
         src={isBlue ? UI_ASSETS.backgroundBlue : UI_ASSETS.backgroundGreen}
         alt=""
         aria-hidden
         width={GAME_LAYOUT.frameWidth}
         height={isBlue ? layout.blueBackgroundHeight : layout.greenBackgroundHeight}
-        unoptimized
         className="absolute inset-x-0 w-full object-cover"
         style={
           isBlue
@@ -49,13 +49,12 @@ export function PlayerArea({
             : { bottom: 0, height: gameSize(layout.greenBackgroundHeight) }
         }
       />
-      <Image
+      <GameImage
         src={isBlue ? UI_ASSETS.teamBlue : UI_ASSETS.teamGreen}
         alt=""
         aria-hidden
         width={isBlue ? layout.teamBlue.width : layout.teamGreen.width}
         height={isBlue ? layout.teamBlue.height : layout.teamGreen.height}
-        unoptimized
         className="absolute z-10 mix-blend-multiply"
         style={
           isBlue
@@ -74,6 +73,8 @@ export function PlayerArea({
         }
       />
       <div
+        role="list"
+        aria-label={`${teamLabel}の持ち駒`}
         className="absolute z-20 flex mix-blend-normal items-center"
         style={{
           width: gameSize(capturedLayout.width),
@@ -88,8 +89,9 @@ export function PlayerArea({
           <button
             key={`${piece}-${index}`}
             type="button"
-            aria-label={`持ち駒 ${piece}`}
-            aria-pressed={placingPiece === piece}
+            role="listitem"
+            aria-label={`持ち駒 ${getPieceLabel(piece)}`}
+            aria-selected={placingPiece === piece || undefined}
             disabled={!isActive || !onSelectCaptured}
             onClick={() => onSelectCaptured?.(piece)}
             className="shrink-0 disabled:cursor-default"
