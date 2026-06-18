@@ -54,7 +54,12 @@ function getMoveDirections(kind: PieceKind, player: Player): Direction[] {
         { row: 1, col: 1 },
       ];
     case 'giraffe':
-      return [forward, { row: 0, col: -1 }, { row: 0, col: 1 }];
+      return [
+        forward,
+        { row: -forward.row, col: 0 },
+        { row: 0, col: -1 },
+        { row: 0, col: 1 },
+      ];
     case 'chick':
       return [forward];
     case 'chicken': {

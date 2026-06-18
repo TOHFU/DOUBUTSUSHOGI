@@ -7,6 +7,6 @@ test('GameScreenの見た目', async () => {
   const view = await render(<GameScreen />);
 
   await expect
-    .element(view.getByRole('button', { name: 'ゲームを開始' }))
+    .element(view.getByRole('button', { name: 'かんたん' }))
     .toBeVisible();
 });
