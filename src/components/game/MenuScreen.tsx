@@ -1,27 +1,33 @@
 'use client';
 
+import { GameDialog } from '@/components/game/GameDialog';
 import { GameImage } from '@/components/game/GameImage';
 import { UI_ASSETS } from '@/components/game/assets';
 import { MENU_LAYOUT } from '@/components/game/menuLayout';
-import { gameSize } from '@/components/game/gameLayout';
+import { GAME_LAYOUT, gameSize } from '@/components/game/gameLayout';
 import type { Difficulty } from '@/domain/game/types';
 
 interface MenuScreenProps {
+  open: boolean;
   onSelectDifficulty: (difficulty: Difficulty) => void;
 }
 
-export function MenuScreen({ onSelectDifficulty }: MenuScreenProps) {
+export function MenuScreen({ open, onSelectDifficulty }: MenuScreenProps) {
   const { header, difficultyLabel, easyButton, hardButton } = MENU_LAYOUT;
 
   return (
-    <div
-      className="absolute inset-0 z-30 bg-white"
-      role="dialog"
-      aria-label="メニュー"
-    >
+    <GameDialog open={open} variant="menu" aria-label="メニュー">
+      <div
+        className="relative shrink-0"
+        style={{
+          width: gameSize(GAME_LAYOUT.frameWidth),
+          height: gameSize(GAME_LAYOUT.frameHeight),
+        }}
+      >
       <GameImage
         src={UI_ASSETS.menuHeader}
         alt=""
+        aria-hidden
         width={header.width}
         height={header.height}
         className="absolute"
@@ -36,7 +42,8 @@ export function MenuScreen({ onSelectDifficulty }: MenuScreenProps) {
 
       <GameImage
         src={UI_ASSETS.menuDifficultyLabel}
-        alt="難易度"
+        alt=""
+        aria-hidden
         width={difficultyLabel.width}
         height={difficultyLabel.height}
         className="absolute"
@@ -63,7 +70,8 @@ export function MenuScreen({ onSelectDifficulty }: MenuScreenProps) {
       >
         <GameImage
           src={UI_ASSETS.menuEasyButton}
-          alt="かんたん"
+          alt=""
+          aria-hidden
           width={easyButton.width}
           height={easyButton.height}
           className="pointer-events-none h-full w-full"
@@ -85,12 +93,14 @@ export function MenuScreen({ onSelectDifficulty }: MenuScreenProps) {
       >
         <GameImage
           src={UI_ASSETS.menuHardButton}
-          alt="むずかしい"
+          alt=""
+          aria-hidden
           width={hardButton.width}
           height={hardButton.height}
           className="pointer-events-none h-full w-full"
         />
       </button>
-    </div>
+      </div>
+    </GameDialog>
   );
 }

@@ -13,3 +13,12 @@ export function isHumanCapturingActive(state: GameState): boolean {
 export function isResultPhase(phase: GameState['phase']): boolean {
   return phase === 'youWin' || phase === 'youLose';
 }
+
+export function isOverlayPhase(phase: GameState['phase']): boolean {
+  return (
+    phase === 'menu' ||
+    phase === 'gameStart' ||
+    phase === 'youWin' ||
+    phase === 'youLose'
+  );
+}

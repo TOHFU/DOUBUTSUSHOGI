@@ -1,14 +1,16 @@
+import { GameDialog } from '@/components/game/GameDialog';
 import { GameImage } from '@/components/game/GameImage';
 import { UI_ASSETS } from '@/components/game/assets';
 import { gameSize } from '@/components/game/gameLayout';
 import { RESULT_OVERLAY_LAYOUT } from '@/components/game/resultOverlayLayout';
 
 interface ResultOverlayProps {
+  open: boolean;
   variant: 'youWin' | 'youLose';
   onRetry: () => void;
 }
 
-export function ResultOverlay({ variant, onRetry }: ResultOverlayProps) {
+export function ResultOverlay({ open, variant, onRetry }: ResultOverlayProps) {
   const messageAsset =
     variant === 'youWin'
       ? UI_ASSETS.youWinMessage
@@ -17,46 +19,47 @@ export function ResultOverlay({ variant, onRetry }: ResultOverlayProps) {
   const { message, retry } = RESULT_OVERLAY_LAYOUT;
 
   return (
-    <div
-      className="absolute inset-0 z-40 flex items-center justify-center px-4"
-      role="dialog"
-      aria-modal="true"
-      aria-label={messageAlt}
-    >
+    <GameDialog open={open} variant="result" aria-label={messageAlt}>
       <div
-        className="relative max-w-[90vw]"
-        style={{
-          width: gameSize(message.width),
-        }}
+        className="flex size-full items-center justify-center px-4"
       >
-        <GameImage
-          src={messageAsset}
-          alt={messageAlt}
-          width={message.width}
-          height={message.height}
-          className="pointer-events-none block h-auto w-full"
-          priority
-        />
-        <button
-          type="button"
-          aria-label="リトライ"
-          onClick={onRetry}
-          className="absolute left-1/2 -translate-x-1/2 transition hover:opacity-80 active:scale-95"
+        <div
+          className="relative max-w-[90vw]"
           style={{
-            top: gameSize(retry.top),
-            width: gameSize(retry.width),
-            height: gameSize(retry.height),
+            width: gameSize(message.width),
           }}
         >
           <GameImage
-            src={UI_ASSETS.retryButton}
-            alt="RETRY"
-            width={retry.width}
-            height={retry.height}
-            className="h-full w-full"
+            src={messageAsset}
+            alt=""
+            aria-hidden
+            width={message.width}
+            height={message.height}
+            className="pointer-events-none block h-auto w-full"
+            priority
           />
-        </button>
+          <button
+            type="button"
+            aria-label="リトライ"
+            onClick={onRetry}
+            className="absolute left-1/2 -translate-x-1/2 transition hover:opacity-80 active:scale-95"
+            style={{
+              top: gameSize(retry.top),
+              width: gameSize(retry.width),
+              height: gameSize(retry.height),
+            }}
+          >
+            <GameImage
+              src={UI_ASSETS.retryButton}
+              alt=""
+              aria-hidden
+              width={retry.width}
+              height={retry.height}
+              className="h-full w-full"
+            />
+          </button>
+        </div>
       </div>
-    </div>
+    </GameDialog>
   );
 }
