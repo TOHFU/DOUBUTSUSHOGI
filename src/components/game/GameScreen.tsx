@@ -1,5 +1,7 @@
 'use client';
 
+import { useLayoutEffect, useState } from 'react';
+
 import { GameBoard } from '@/components/game/GameBoard';
 import { GameStage } from '@/components/game/GameStage';
 import { GameStartOverlay } from '@/components/game/GameStartOverlay';
@@ -15,6 +17,11 @@ export function GameScreen() {
   const { state, selectDifficulty, start, retry, selectSquare, selectCaptured } =
     useGameController();
   const overlayOpen = isOverlayPhase(state.phase);
+  const [isScreenVisible, setIsScreenVisible] = useState(false);
+
+  useLayoutEffect(() => {
+    setIsScreenVisible(true);
+  }, []);
 
   return (
     <main className={GAME_SCREEN_CLASS}>
@@ -25,7 +32,14 @@ export function GameScreen() {
           height: gameSize(GAME_LAYOUT.frameHeight),
         }}
       >
-        <div inert={overlayOpen ? true : undefined}>
+        <div
+          className={
+            state.phase === 'menu'
+              ? 'game-screen__playfield game-screen__playfield--menu-hidden'
+              : 'game-screen__playfield'
+          }
+          inert={overlayOpen ? true : undefined}
+        >
           <GameStage />
 
           <div className="relative flex h-full flex-col">
@@ -64,6 +78,7 @@ export function GameScreen() {
 
         <MenuScreen
           open={state.phase === 'menu'}
+          fadeVisible={isScreenVisible}
           onSelectDifficulty={selectDifficulty}
         />
 
