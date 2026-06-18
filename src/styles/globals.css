@@ -25,6 +25,25 @@ body {
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
 
+.game-screen__playfield--menu-hidden {
+  visibility: hidden;
+}
+
+.menu-screen__content {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.menu-screen__content[data-visible] {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-screen__content {
+    transition: none;
+  }
+}
+
 .game-dialog {
   position: fixed;
   inset: 0;
