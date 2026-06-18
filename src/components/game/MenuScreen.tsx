@@ -9,21 +9,26 @@ import type { Difficulty } from '@/domain/game/types';
 
 interface MenuScreenProps {
   open: boolean;
+  fadeVisible?: boolean;
   onSelectDifficulty: (difficulty: Difficulty) => void;
 }
 
-export function MenuScreen({ open, onSelectDifficulty }: MenuScreenProps) {
+export function MenuScreen({ open, fadeVisible, onSelectDifficulty }: MenuScreenProps) {
   const { header, difficultyLabel, easyButton, hardButton } = MENU_LAYOUT;
 
   return (
     <GameDialog open={open} variant="menu" aria-label="メニュー">
       <div
-        className="relative shrink-0"
-        style={{
-          width: gameSize(GAME_LAYOUT.frameWidth),
-          height: gameSize(GAME_LAYOUT.frameHeight),
-        }}
+        className="menu-screen__content"
+        data-visible={fadeVisible || undefined}
       >
+        <div
+          className="relative shrink-0"
+          style={{
+            width: gameSize(GAME_LAYOUT.frameWidth),
+            height: gameSize(GAME_LAYOUT.frameHeight),
+          }}
+        >
       <GameImage
         src={UI_ASSETS.menuHeader}
         alt=""
@@ -100,6 +105,7 @@ export function MenuScreen({ open, onSelectDifficulty }: MenuScreenProps) {
           className="pointer-events-none h-full w-full"
         />
       </button>
+        </div>
       </div>
     </GameDialog>
   );
