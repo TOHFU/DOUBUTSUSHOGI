@@ -75,11 +75,10 @@ export function PlayerArea({
       <div
         role="list"
         aria-label={`${teamLabel}の持ち駒`}
-        className="absolute z-20 flex mix-blend-normal items-center"
+        className="absolute inset-x-0 z-20 flex w-full items-center overflow-x-auto overflow-y-hidden mix-blend-normal"
         style={{
-          width: gameSize(capturedLayout.width),
           height: gameSize(capturedLayout.height),
-          left: gameSize(capturedLayout.left),
+          paddingInline: gameSize(capturedLayout.left),
           ...(isBlue
             ? { top: gameSize(capturedLayout.blueTop) }
             : { bottom: gameSize(capturedLayout.greenBottom) }),
