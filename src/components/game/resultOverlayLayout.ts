@@ -9,6 +9,6 @@ export const RESULT_OVERLAY_LAYOUT = {
     width: 158,
     height: 78,
     /** message 上端からの offset (px) */
-    top: 153,
+    top: 148,
   },
 } as const;

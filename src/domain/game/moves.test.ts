@@ -40,6 +40,24 @@ describe('moves', () => {
     expect(moves).toHaveLength(6);
   });
 
+  it('キリンは前方・後方・左右の4マスに動ける', () => {
+    const board: Board = [
+      [null, null, null],
+      [null, { kind: 'giraffe', owner: 'green' }, null],
+      [null, null, null],
+      [null, null, null],
+    ];
+
+    const moves = getMovesForPiece(board, { row: 1, col: 1 });
+
+    expect(moves).toEqual([
+      { row: 0, col: 1 },
+      { row: 2, col: 1 },
+      { row: 1, col: 0 },
+      { row: 1, col: 2 },
+    ]);
+  });
+
   it('持ち駒は空いているマスすべてに置ける', () => {
     const board: Board = [
       [null, null, null],

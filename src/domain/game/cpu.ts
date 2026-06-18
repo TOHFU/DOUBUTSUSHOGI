@@ -1,4 +1,5 @@
 import { CPU_PLAYER, HUMAN_PLAYER } from '@/domain/game/constants';
+import { hardMovePicker } from '@/domain/game/cpuStrategy';
 import { getDropMoves, getMovesForPiece } from '@/domain/game/moves';
 import { applyMoveWithCapture, executeMove } from '@/domain/game/turn';
 import { toResultPhase } from '@/domain/game/stateHelpers';
@@ -56,14 +57,16 @@ export function defaultMovePicker(
   return lionCapture ?? candidates[Math.floor(random() * candidates.length)]!;
 }
 
-export function pickCpuMove(
-  state: GameState,
-  pickMove: MovePicker = (candidates, currentState) =>
-    defaultMovePicker(candidates, currentState),
-): GameState {
+export function pickCpuMove(state: GameState): GameState {
   if (state.currentPlayer !== CPU_PLAYER) {
     return state;
   }
+
+  const pickMove: MovePicker =
+    state.difficulty === 'hard'
+      ? (candidates, currentState) => hardMovePicker(candidates, currentState)
+      : (candidates, currentState) =>
+          defaultMovePicker(candidates, currentState);
 
   const candidates = [...collectBoardMoves(state), ...collectDropMoves(state)];
 

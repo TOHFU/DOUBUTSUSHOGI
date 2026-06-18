@@ -9,13 +9,15 @@ import {
   retryGame,
   selectBoardSquare,
   selectCapturedPiece,
+  selectDifficulty,
   startGame,
 } from '@/domain/game/game';
 import { HUMAN_PLAYER } from '@/domain/game/constants';
 import { isTerminalPhase } from '@/domain/game/stateHelpers';
-import type { GameState, PieceKind, Position } from '@/domain/game/types';
+import type { Difficulty, GameState, PieceKind, Position } from '@/domain/game/types';
 
 type GameAction =
+  | { type: 'selectDifficulty'; difficulty: Difficulty }
   | { type: 'start' }
   | { type: 'retry' }
   | { type: 'selectSquare'; position: Position }
@@ -24,6 +26,8 @@ type GameAction =
 
 function gameReducer(state: GameState, action: GameAction): GameState {
   switch (action.type) {
+    case 'selectDifficulty':
+      return selectDifficulty(state, action.difficulty);
     case 'start':
       return startGame(state);
     case 'retry':
@@ -83,6 +87,8 @@ export function useGameController() {
 
   return {
     state,
+    selectDifficulty: (difficulty: Difficulty) =>
+      dispatch({ type: 'selectDifficulty', difficulty }),
     start: () => dispatch({ type: 'start' }),
     retry: () => dispatch({ type: 'retry' }),
     selectSquare,

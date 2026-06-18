@@ -3,6 +3,7 @@
 import { GameBoard } from '@/components/game/GameBoard';
 import { GameStage } from '@/components/game/GameStage';
 import { GameStartOverlay } from '@/components/game/GameStartOverlay';
+import { MenuScreen } from '@/components/game/MenuScreen';
 import { PlayerArea } from '@/components/game/PlayerArea';
 import { ResultOverlay } from '@/components/game/ResultOverlay';
 import { GAME_SCREEN_CLASS, GAME_LAYOUT, gameSize } from '@/components/game/gameLayout';
@@ -11,7 +12,7 @@ import { useGameController } from '@/components/game/useGameController';
 import { HUMAN_PLAYER } from '@/domain/game/constants';
 
 export function GameScreen() {
-  const { state, start, retry, selectSquare, selectCaptured } =
+  const { state, selectDifficulty, start, retry, selectSquare, selectCaptured } =
     useGameController();
 
   return (
@@ -57,6 +58,10 @@ export function GameScreen() {
             className="relative z-[1] shrink-0"
           />
         </div>
+
+        {state.phase === 'menu' ? (
+          <MenuScreen onSelectDifficulty={selectDifficulty} />
+        ) : null}
 
         {state.phase === 'gameStart' ? (
           <GameStartOverlay onStart={start} />

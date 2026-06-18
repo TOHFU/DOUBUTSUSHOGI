@@ -9,14 +9,20 @@ import type {
 } from '@/domain/game/types';
 
 export function isTerminalPhase(phase: GamePhase): boolean {
-  return phase === 'gameStart' || phase === 'youWin' || phase === 'youLose';
+  return (
+    phase === 'menu' ||
+    phase === 'gameStart' ||
+    phase === 'youWin' ||
+    phase === 'youLose'
+  );
 }
 
 export function createInitialGameState(): GameState {
   return {
     board: createInitialBoard(),
     currentPlayer: HUMAN_PLAYER,
-    phase: 'gameStart',
+    phase: 'menu',
+    difficulty: null,
     selectedPosition: null,
     highlightedPositions: [],
     captured: { blue: [], green: [] },
@@ -70,6 +76,7 @@ export function resolveWinner(board: GameState['board']): Player | null {
 export function startGame(state: GameState): GameState {
   return toPlayingState({
     ...createInitialGameState(),
+    difficulty: state.difficulty,
     captured: state.captured,
   });
 }

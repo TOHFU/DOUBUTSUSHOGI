@@ -11,6 +11,10 @@ const UI_ASSETS = {
   youWinMessage: '/assets/game/ui/you-win-message.png',
   youLoseMessage: '/assets/game/ui/you-lose-message.png',
   retryButton: '/assets/game/ui/retry-button.png',
+  menuHeader: '/assets/game/ui/menu-header.png',
+  menuDifficultyLabel: '/assets/game/ui/menu-difficulty-label.png',
+  menuEasyButton: '/assets/game/ui/menu-easy-button.png',
+  menuHardButton: '/assets/game/ui/menu-hard-button.png',
 } as const;
 
 export function getPieceImagePath(kind: PieceKind, owner: Player): string {

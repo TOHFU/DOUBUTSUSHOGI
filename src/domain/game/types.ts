@@ -27,6 +27,7 @@ export type Cell = Piece | null;
 export type Board = Cell[][];
 
 export type GamePhase =
+  | 'menu'
   | 'gameStart'
   | 'playing'
   | 'pieceSelect'
@@ -34,10 +35,13 @@ export type GamePhase =
   | 'youWin'
   | 'youLose';
 
+export type Difficulty = 'easy' | 'hard';
+
 export interface GameState {
   board: Board;
   currentPlayer: Player;
   phase: GamePhase;
+  difficulty: Difficulty | null;
   selectedPosition: Position | null;
   highlightedPositions: Position[];
   captured: Record<Player, PieceKind[]>;
