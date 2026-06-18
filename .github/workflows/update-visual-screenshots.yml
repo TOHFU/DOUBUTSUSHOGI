@@ -1,0 +1,87 @@
+name: Update Visual Regression Screenshots
+
+on:
+  workflow_dispatch:
+
+env:
+  AUTHOR_NAME: github-actions[bot]
+  AUTHOR_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+
+jobs:
+  update-screenshots:
+    name: Update screenshot baselines
+    runs-on: ubuntu-24.04
+    if: github.ref_name != 'main'
+    concurrency:
+      group: visual-regression-screenshots@${{ github.ref_name }}
+      cancel-in-progress: true
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "${{ env.AUTHOR_NAME }}"
+          git config --global user.email "${{ env.AUTHOR_EMAIL }}"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Update visual regression screenshots
+        run: pnpm test:visual:update
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          CHANGED_FILES=$(git status --porcelain | awk '{print $2}')
+          if [ -n "${CHANGED_FILES}" ]; then
+            echo "changes=true" >> "$GITHUB_OUTPUT"
+            {
+              echo "changed_files<<EOF"
+              echo "$CHANGED_FILES"
+              echo "EOF"
+            } >> "$GITHUB_OUTPUT"
+          else
+            echo "changes=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit and push screenshot updates
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          git add -A
+          git commit -m "$(cat <<'EOF'
+test: visual regression のベースライン画像を更新
+
+EOF
+)"
+          git push origin "${{ github.ref_name }}"
+
+      - name: Summary
+        run: |
+          if [ "${{ steps.check_changes.outputs.changes }}" = "true" ]; then
+            echo "### Visual regression screenshots updated" >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+            echo "${{ steps.check_changes.outputs.changed_files }}" >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "### No screenshot updates required" >> "$GITHUB_STEP_SUMMARY"
+          fi
