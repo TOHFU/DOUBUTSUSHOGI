@@ -17,6 +17,10 @@ export const metadata: Metadata = {
   title: 'DOUBUTSUSHOGI',
   description: '動物将棋のオンライン対戦プラットフォーム',
   applicationName: 'DOUBUTSUSHOGI',
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/icon-192.png',
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
