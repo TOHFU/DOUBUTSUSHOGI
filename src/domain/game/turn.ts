@@ -9,6 +9,10 @@ import {
 } from '@/domain/game/stateHelpers';
 import type { GameState, Move } from '@/domain/game/types';
 
+/**
+ * 1手を実行し、取り駒・手番交代・勝敗判定を反映した新しい状態を返す。
+ * 勝者が確定した場合は結果フェーズへ遷移する。
+ */
 export function executeMove(state: GameState, move: Move): GameState {
   const target = state.board[move.to.row]?.[move.to.col] ?? null;
   const capturedKind = target?.kind;
@@ -45,6 +49,10 @@ export function executeMove(state: GameState, move: Move): GameState {
   };
 }
 
+/**
+ * 持ち駒の打ち込みを含む手の実行。
+ * 打ち駒の場合は持ち駒リストから消費する。
+ */
 export function applyMoveWithCapture(state: GameState, move: Move): GameState {
   const mover = state.currentPlayer;
   const nextState = executeMove(state, move);

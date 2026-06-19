@@ -19,10 +19,12 @@ import {
 
 type Direction = { row: number; col: number };
 
+/** プレイヤー視点の前方方向を返す（blue=下、green=上） */
 function forwardDirection(player: Player): Direction {
   return player === 'blue' ? { row: 1, col: 0 } : { row: -1, col: 0 };
 }
 
+/** 座標に方向ベクトルを加算する */
 function addDirection(position: Position, direction: Direction): Position {
   return {
     row: position.row + direction.row,
@@ -30,6 +32,11 @@ function addDirection(position: Position, direction: Direction): Position {
   };
 }
 
+/**
+ * 駒種とプレイヤーに応じた移動方向の一覧を返す。
+ * ライオンは前方+周囲8方向、ゾウは斜め4方向、キリンは前方+左右、
+ * ヒヨコは前方1マス、ニワトリは斜め後ろを除く周囲6マス。
+ */
 function getMoveDirections(kind: PieceKind, player: Player): Direction[] {
   const forward = forwardDirection(player);
 
@@ -91,6 +98,7 @@ function getMoveDirections(kind: PieceKind, player: Player): Direction[] {
   }
 }
 
+/** 指定マスへ移動可能か（盤内かつ自駒でない）を判定する */
 function canMoveTo(
   board: Board,
   player: Player,
@@ -104,6 +112,10 @@ function canMoveTo(
   return target === null || target.owner !== player;
 }
 
+/**
+ * 盤上の駒が移動可能なマス一覧を返す。
+ * 空マスと相手駒のマスを含む。
+ */
 export function getMovesForPiece(
   board: Board,
   from: Position,
@@ -119,6 +131,7 @@ export function getMovesForPiece(
     .filter((position) => canMoveTo(board, piece.owner, position));
 }
 
+/** 持ち駒を打てる空マスの一覧を返す */
 export function getDropMoves(board: Board): Position[] {
   const positions: Position[] = [];
 
@@ -135,6 +148,10 @@ export function getDropMoves(board: Board): Position[] {
   return positions;
 }
 
+/**
+ * 1手を盤面に適用した新しい盤面を返す。
+ * 移動元を空にし、移動先に駒を配置する。成り判定も行う。
+ */
 export function applyMove(board: Board, move: Move, player: Player): Board {
   let nextBoard = cloneBoard(board);
 
@@ -158,6 +175,7 @@ export function applyMove(board: Board, move: Move, player: Player): Board {
   return nextBoard;
 }
 
+/** 指定プレイヤーのライオンの位置を探索する。存在しない場合は null */
 export function findLion(board: Board, player: Player): Position | null {
   for (let row = 0; row < BOARD_ROWS; row += 1) {
     for (let col = 0; col < BOARD_COLS; col += 1) {
@@ -172,6 +190,7 @@ export function findLion(board: Board, player: Player): Position | null {
   return null;
 }
 
+/** 座標がリスト内に含まれるかどうかを判定する */
 export function isPositionInList(
   position: Position,
   list: Position[],

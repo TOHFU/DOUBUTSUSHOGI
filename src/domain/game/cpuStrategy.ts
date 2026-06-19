@@ -12,6 +12,7 @@ import {
 } from '@/domain/game/types';
 import type { GameState } from '@/domain/game/types';
 
+/** 駒種ごとの評価値（hard 難易度の手番評価に使用） */
 const PIECE_VALUES: Record<PieceKind, number> = {
   lion: 10000,
   giraffe: 400,
@@ -20,6 +21,7 @@ const PIECE_VALUES: Record<PieceKind, number> = {
   chick: 150,
 };
 
+/** 指定プレイヤーが相手のライオンを次の手で取れるかどうかを判定する */
 function canPlayerCaptureLion(
   board: Board,
   attacker: Player,
@@ -53,10 +55,15 @@ function canPlayerCaptureLion(
   return false;
 }
 
+/** 2座標間のマンハッタン距離 */
 function manhattan(a: Position, b: Position): number {
   return Math.abs(a.row - b.row) + Math.abs(a.col - b.col);
 }
 
+/**
+ * hard 難易度向けに1手の評価スコアを算出する。
+ * ライオン捕獲・駒得・自ライオン危険・相手ライオンへの接近を考慮する。
+ */
 function scoreMove(state: GameState, move: Move): number {
   const target = getCell(state.board, move.to);
   const nextBoard = applyMove(state.board, move, CPU_PLAYER);
@@ -97,6 +104,10 @@ function scoreMove(state: GameState, move: Move): number {
   return score;
 }
 
+/**
+ * hard 難易度の手番選択。
+ * 全候補手を評価し、最高スコアの手からランダムに1手選ぶ。
+ */
 export function hardMovePicker(candidates: Move[], state: GameState): Move {
   const scored = candidates.map((move) => ({
     move,

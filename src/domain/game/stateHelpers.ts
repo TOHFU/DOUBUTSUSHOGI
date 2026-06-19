@@ -8,6 +8,7 @@ import type {
   Player,
 } from '@/domain/game/types';
 
+/** 対局が終了したフェーズ（メニュー・開始・勝敗）かどうかを判定する */
 export function isTerminalPhase(phase: GamePhase): boolean {
   return (
     phase === 'menu' ||
@@ -17,6 +18,7 @@ export function isTerminalPhase(phase: GamePhase): boolean {
   );
 }
 
+/** メニュー画面用の初期ゲーム状態を生成する */
 export function createInitialGameState(): GameState {
   return {
     board: createInitialBoard(),
@@ -31,6 +33,7 @@ export function createInitialGameState(): GameState {
   };
 }
 
+/** 選択状態をリセットし playing フェーズへ遷移する */
 export function toPlayingState(state: GameState): GameState {
   return {
     ...state,
@@ -41,10 +44,15 @@ export function toPlayingState(state: GameState): GameState {
   };
 }
 
+/** 勝者に応じた結果フェーズを返す（人間勝利=youWin、CPU勝利=youLose） */
 export function toResultPhase(winner: Player): GamePhase {
   return winner === HUMAN_PLAYER ? 'youWin' : 'youLose';
 }
 
+/**
+ * 駒を取った際の持ち駒リストを更新する。
+ * ニワトリはヒヨコに戻して相手の持ち駒に追加する。
+ */
 export function handleCapture(
   state: GameState,
   capturedKind: PieceKind,
@@ -58,6 +66,10 @@ export function handleCapture(
   };
 }
 
+/**
+ * 盤面上のライオンの有無から勝者を判定する。
+ * どちらかのライオンが盤上にいなければ、相手プレイヤーの勝利。
+ */
 export function resolveWinner(board: GameState['board']): Player | null {
   const blueLion = findLion(board, 'blue');
   const greenLion = findLion(board, 'green');
@@ -73,6 +85,7 @@ export function resolveWinner(board: GameState['board']): Player | null {
   return null;
 }
 
+/** 難易度を引き継いで新規対局を開始する */
 export function startGame(state: GameState): GameState {
   return toPlayingState({
     ...createInitialGameState(),
@@ -81,10 +94,12 @@ export function startGame(state: GameState): GameState {
   });
 }
 
+/** メニュー画面へ戻す（全状態をリセット） */
 export function retryGame(): GameState {
   return createInitialGameState();
 }
 
+/** 持ち駒リストから打ち込んだ駒を1つ消費する */
 export function consumeCapturedPiece(
   state: GameState,
   piece: PieceKind,
@@ -102,6 +117,7 @@ export function consumeCapturedPiece(
   };
 }
 
+/** 手番を相手プレイヤーに交代する */
 export function switchTurn(state: GameState): Player {
   return getOpponent(state.currentPlayer);
 }
