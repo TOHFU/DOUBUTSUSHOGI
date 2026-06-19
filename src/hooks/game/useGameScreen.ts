@@ -1,5 +1,7 @@
 'use client';
 
+import { useLayoutEffect, useState } from 'react';
+
 import { useGameController } from '@/hooks/game/useGameController';
 import { useGamePhase } from '@/hooks/game/useGamePhase';
 import { HUMAN_PLAYER } from '@/domain/game/constants';
@@ -8,12 +10,20 @@ import { HUMAN_PLAYER } from '@/domain/game/constants';
 export function useGameScreen() {
   const controller = useGameController();
   const phase = useGamePhase(controller.state);
+  const [isScreenVisible, setIsScreenVisible] = useState(false);
+
+  useLayoutEffect(() => {
+    setIsScreenVisible(true);
+  }, []);
 
   const { state } = controller;
 
   return {
     ...controller,
     phase,
+    playfieldClassName: phase.isMenuOpen
+      ? 'game-screen__playfield game-screen__playfield--menu-hidden'
+      : 'game-screen__playfield',
     boardProps: {
       board: state.board,
       selectedPosition: state.selectedPosition,
@@ -35,6 +45,7 @@ export function useGameScreen() {
     },
     menuProps: {
       open: phase.isMenuOpen,
+      fadeVisible: isScreenVisible,
       onSelectDifficulty: controller.selectDifficulty,
     },
     gameStartProps: {

@@ -12,6 +12,7 @@ import { useGameScreen } from '@/hooks';
 export function GameScreen() {
   const {
     phase,
+    playfieldClassName,
     boardProps,
     cpuPlayerAreaProps,
     humanPlayerAreaProps,
@@ -30,7 +31,7 @@ export function GameScreen() {
           height: gameSize(GAME_LAYOUT.frameHeight),
         }}
       >
-        <div inert={phase.isOverlayPhase ? true : undefined}>
+        <div className={playfieldClassName} inert={phase.isOverlayPhase ? true : undefined}>
           <GameStage />
 
           <div className="relative flex h-full flex-col">
