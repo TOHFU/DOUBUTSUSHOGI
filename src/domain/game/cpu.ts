@@ -11,8 +11,10 @@ import {
   type Position,
 } from '@/domain/game/types';
 
+/** 候補手の中から1手を選ぶ関数の型 */
 export type MovePicker = (candidates: Move[], state: GameState) => Move;
 
+/** CPU の盤上駒による合法手をすべて収集する */
 function collectBoardMoves(state: GameState): Move[] {
   const boardMoves: Move[] = [];
 
@@ -34,6 +36,7 @@ function collectBoardMoves(state: GameState): Move[] {
   return boardMoves;
 }
 
+/** CPU の持ち駒打ち込みの合法手をすべて収集する */
 function collectDropMoves(state: GameState): Move[] {
   return state.captured.blue.flatMap((piece) =>
     getDropMoves(state.board).map((to) => ({
@@ -44,6 +47,10 @@ function collectDropMoves(state: GameState): Move[] {
   );
 }
 
+/**
+ * easy 難易度の手番選択。
+ * 相手ライオンを取れる手があれば優先し、なければランダムに選択する。
+ */
 export function defaultMovePicker(
   candidates: Move[],
   state: GameState,
@@ -57,6 +64,10 @@ export function defaultMovePicker(
   return lionCapture ?? candidates[Math.floor(random() * candidates.length)]!;
 }
 
+/**
+ * CPU の手番を処理し、1手指した後の状態を返す。
+ * 合法手がない場合は人間の勝利とする。
+ */
 export function pickCpuMove(state: GameState): GameState {
   if (state.currentPlayer !== CPU_PLAYER) {
     return state;

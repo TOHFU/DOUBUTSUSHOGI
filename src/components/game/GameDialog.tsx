@@ -2,7 +2,7 @@
 
 import type { ReactNode } from 'react';
 
-import { useModalDialog } from '@/components/game/useModalDialog';
+import { useModalDialog } from '@/hooks';
 
 type GameDialogVariant = 'menu' | 'gameStart' | 'result';
 

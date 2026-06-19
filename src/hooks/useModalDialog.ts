@@ -2,7 +2,11 @@
 
 import { useCallback, useLayoutEffect, useRef } from 'react';
 
-function syncDialogOpenState(dialog: HTMLDialogElement, open: boolean, wasOpenRef: { current: boolean }) {
+function syncDialogOpenState(
+  dialog: HTMLDialogElement,
+  open: boolean,
+  wasOpenRef: { current: boolean },
+) {
   if (open && !wasOpenRef.current) {
     dialog.showModal();
     wasOpenRef.current = true;
@@ -15,6 +19,7 @@ function syncDialogOpenState(dialog: HTMLDialogElement, open: boolean, wasOpenRe
   }
 }
 
+/** ネイティブ dialog 要素の開閉を open prop と同期するフック */
 export function useModalDialog(open: boolean) {
   const dialogRef = useRef<HTMLDialogElement | null>(null);
   const wasOpenRef = useRef(false);
