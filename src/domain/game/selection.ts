@@ -10,10 +10,9 @@ import type { GameState, PieceKind, Position } from '@/domain/game/types';
 
 /**
  * 盤面のマスを選択したときの状態遷移を処理する。
- *
- * - 持ち駒打ち込み中: ハイライト済みマスへ打つ、または自駒を選択し直す
- * - 駒選択中: 移動先へ移動、同一マスで選択解除
- * - 通常時: 自駒を選択して移動可能マスをハイライト
+ * @param state - 選択前のゲーム状態
+ * @param position - 選択されたマスの座標
+ * @returns 選択後のゲーム状態
  */
 export function selectBoardSquare(
   state: GameState,
@@ -86,7 +85,9 @@ export function selectBoardSquare(
 
 /**
  * 持ち駒を選択したときの状態遷移を処理する。
- * 打てる空マスをハイライトし、havePieceSelect フェーズへ遷移する。
+ * @param state - 選択前のゲーム状態
+ * @param piece - 選択された持ち駒の種類
+ * @returns 選択後のゲーム状態。打てる空マスをハイライトする
  */
 export function selectCapturedPiece(
   state: GameState,

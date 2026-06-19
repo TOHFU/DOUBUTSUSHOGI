@@ -10,7 +10,11 @@ import type { GameState } from '@/domain/game/types';
 
 const CPU_MOVE_DELAY_MS = 500;
 
-/** CPU 手番時に自動で手を指すフック */
+/**
+ * CPU 手番時に自動で手を指すフック。
+ * @param state - 現在のゲーム状態
+ * @param dispatch - ゲームアクションの dispatch 関数
+ */
 export function useCpuTurn(
   state: GameState,
   dispatch: Dispatch<GameAction>,

@@ -6,7 +6,10 @@ import { useGameController } from '@/hooks/game/useGameController';
 import { useGamePhase } from '@/hooks/game/useGamePhase';
 import { HUMAN_PLAYER } from '@/domain/game/constants';
 
-/** GameScreen の状態配線とフェーズ判定をまとめたフック */
+/**
+ * GameScreen の状態配線とフェーズ判定をまとめたフック。
+ * @returns GameScreen 向けの状態・props 配線オブジェクト
+ */
 export function useGameScreen() {
   const controller = useGameController();
   const phase = useGamePhase(controller.state);

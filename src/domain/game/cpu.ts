@@ -11,10 +11,19 @@ import {
   type Position,
 } from '@/domain/game/types';
 
-/** 候補手の中から1手を選ぶ関数の型 */
+/**
+ * 候補手の中から1手を選ぶ関数の型。
+ * @param candidates - 合法手の候補一覧
+ * @param state - 現在のゲーム状態
+ * @returns 選択された1手
+ */
 export type MovePicker = (candidates: Move[], state: GameState) => Move;
 
-/** CPU の盤上駒による合法手をすべて収集する */
+/**
+ * CPU の盤上駒による合法手をすべて収集する。
+ * @param state - 現在のゲーム状態
+ * @returns 盤上駒による合法手の配列
+ */
 function collectBoardMoves(state: GameState): Move[] {
   const boardMoves: Move[] = [];
 
@@ -36,7 +45,11 @@ function collectBoardMoves(state: GameState): Move[] {
   return boardMoves;
 }
 
-/** CPU の持ち駒打ち込みの合法手をすべて収集する */
+/**
+ * CPU の持ち駒打ち込みの合法手をすべて収集する。
+ * @param state - 現在のゲーム状態
+ * @returns 持ち駒打ちの合法手の配列
+ */
 function collectDropMoves(state: GameState): Move[] {
   return state.captured.blue.flatMap((piece) =>
     getDropMoves(state.board).map((to) => ({
@@ -49,7 +62,10 @@ function collectDropMoves(state: GameState): Move[] {
 
 /**
  * easy 難易度の手番選択。
- * 相手ライオンを取れる手があれば優先し、なければランダムに選択する。
+ * @param candidates - 合法手の候補一覧
+ * @param state - 現在のゲーム状態
+ * @param random - 乱数生成関数
+ * @returns 選択された1手
  */
 export function defaultMovePicker(
   candidates: Move[],
@@ -66,7 +82,8 @@ export function defaultMovePicker(
 
 /**
  * CPU の手番を処理し、1手指した後の状態を返す。
- * 合法手がない場合は人間の勝利とする。
+ * @param state - 手番前のゲーム状態
+ * @returns 手番後のゲーム状態。合法手がなければ人間の勝利
  */
 export function pickCpuMove(state: GameState): GameState {
   if (state.currentPlayer !== CPU_PLAYER) {
