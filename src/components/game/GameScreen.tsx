@@ -7,14 +7,19 @@ import { MenuScreen } from '@/components/game/MenuScreen';
 import { PlayerArea } from '@/components/game/PlayerArea';
 import { ResultOverlay } from '@/components/game/ResultOverlay';
 import { GAME_SCREEN_CLASS, GAME_LAYOUT, gameSize } from '@/components/game/gameLayout';
-import { isHumanCapturingActive, isOverlayPhase, isResultPhase } from '@/components/game/gamePhase';
-import { useGameController } from '@/components/game/useGameController';
-import { HUMAN_PLAYER } from '@/domain/game/constants';
+import { useGameScreen } from '@/hooks';
 
 export function GameScreen() {
-  const { state, selectDifficulty, start, retry, selectSquare, selectCaptured } =
-    useGameController();
-  const overlayOpen = isOverlayPhase(state.phase);
+  const {
+    phase,
+    boardProps,
+    cpuPlayerAreaProps,
+    humanPlayerAreaProps,
+    menuProps,
+    gameStartProps,
+    youWinProps,
+    youLoseProps,
+  } = useGameScreen();
 
   return (
     <main className={GAME_SCREEN_CLASS}>
@@ -25,14 +30,12 @@ export function GameScreen() {
           height: gameSize(GAME_LAYOUT.frameHeight),
         }}
       >
-        <div inert={overlayOpen ? true : undefined}>
+        <div inert={phase.isOverlayPhase ? true : undefined}>
           <GameStage />
 
           <div className="relative flex h-full flex-col">
             <PlayerArea
-              player="blue"
-              capturedPieces={state.captured.blue}
-              isActive={false}
+              {...cpuPlayerAreaProps}
               className="relative z-[1] shrink-0"
             />
 
@@ -41,52 +44,27 @@ export function GameScreen() {
               style={{ marginBlock: gameSize(-GAME_LAYOUT.board.overlapY) }}
               aria-label="対局エリア"
             >
-              <GameBoard
-                board={state.board}
-                selectedPosition={state.selectedPosition}
-                highlightedPositions={state.highlightedPositions}
-                onSelectSquare={selectSquare}
-              />
+              <GameBoard {...boardProps} />
             </section>
 
             <PlayerArea
-              player="green"
-              capturedPieces={state.captured.green}
-              placingPiece={
-                state.currentPlayer === HUMAN_PLAYER ? state.placingPiece : null
-              }
-              isActive={isHumanCapturingActive(state)}
-              onSelectCaptured={selectCaptured}
+              {...humanPlayerAreaProps}
               className="relative z-[1] shrink-0"
             />
           </div>
         </div>
 
-        <MenuScreen
-          open={state.phase === 'menu'}
-          onSelectDifficulty={selectDifficulty}
-        />
+        <MenuScreen {...menuProps} />
 
-        <GameStartOverlay
-          open={state.phase === 'gameStart'}
-          onStart={start}
-        />
+        <GameStartOverlay {...gameStartProps} />
 
-        <ResultOverlay
-          open={state.phase === 'youWin'}
-          variant="youWin"
-          onRetry={retry}
-        />
+        <ResultOverlay {...youWinProps} />
 
-        <ResultOverlay
-          open={state.phase === 'youLose'}
-          variant="youLose"
-          onRetry={retry}
-        />
+        <ResultOverlay {...youLoseProps} />
 
-        {isResultPhase(state.phase) ? (
+        {phase.resultAnnouncement ? (
           <div aria-live="polite" className="sr-only">
-            {state.phase === 'youWin' ? 'YOU WIN' : 'YOU LOSE'}
+            {phase.resultAnnouncement}
           </div>
         ) : null}
       </div>

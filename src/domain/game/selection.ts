@@ -8,6 +8,13 @@ import { applyMoveWithCapture, executeMove } from '@/domain/game/turn';
 import { isTerminalPhase, toPlayingState } from '@/domain/game/stateHelpers';
 import type { GameState, PieceKind, Position } from '@/domain/game/types';
 
+/**
+ * 盤面のマスを選択したときの状態遷移を処理する。
+ *
+ * - 持ち駒打ち込み中: ハイライト済みマスへ打つ、または自駒を選択し直す
+ * - 駒選択中: 移動先へ移動、同一マスで選択解除
+ * - 通常時: 自駒を選択して移動可能マスをハイライト
+ */
 export function selectBoardSquare(
   state: GameState,
   position: Position,
@@ -77,6 +84,10 @@ export function selectBoardSquare(
   };
 }
 
+/**
+ * 持ち駒を選択したときの状態遷移を処理する。
+ * 打てる空マスをハイライトし、havePieceSelect フェーズへ遷移する。
+ */
 export function selectCapturedPiece(
   state: GameState,
   piece: PieceKind,
