@@ -1,0 +1,75 @@
+name: Visual Regression (PR)
+
+on:
+  pull_request:
+    branches: [develop, main]
+
+concurrency:
+  group: visual-regression-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pages: write
+  pull-requests: write
+
+jobs:
+  visual:
+    name: Visual regression report
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run visual regression tests
+        id: visual
+        continue-on-error: true
+        run: pnpm test:visual
+
+      - name: Generate visual regression report
+        run: pnpm test:visual:report
+        env:
+          VISUAL_TEST_PASSED: ${{ steps.visual.outcome == 'success' }}
+
+      - name: Deploy report to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./visual-report
+          destination_dir: previews/pr-${{ github.event.pull_request.number }}
+          keep_files: true
+
+      - name: Comment PR with report link
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: visual-regression-report
+          message: |
+            ## Visual Regression Report
+
+            | Result | Link |
+            | --- | --- |
+            | ${{ steps.visual.outcome == 'success' && '✅ Passed' || '❌ Failed' }} | [Open report](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/previews/pr-${{ github.event.pull_request.number }}/) |
+
+            Baseline / Actual / Diff の比較は GitHub Pages 上で確認できます。
+            UI を意図的に変更した場合は、`Update Visual Regression Screenshots` ワークフローでベースラインを更新してください。
+
+      - name: Fail when visual tests failed
+        if: steps.visual.outcome == 'failure'
+        run: exit 1

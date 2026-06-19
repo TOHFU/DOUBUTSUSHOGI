@@ -14,6 +14,7 @@
 /coverage
 /playwright-report
 /test-results
+/visual-report
 **/.vitest-attachments
 **/__screenshots__/**/*-darwin.png
 /public/sw.js
