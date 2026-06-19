@@ -11,7 +11,12 @@ import {
 import type { GameAction } from '@/hooks/game/types';
 import type { GameState } from '@/domain/game/types';
 
-/** ゲーム状態をドメイン関数で遷移させる reducer */
+/**
+ * ゲーム状態をドメイン関数で遷移させる reducer。
+ * @param state - 現在のゲーム状態
+ * @param action - 実行するアクション
+ * @returns 遷移後のゲーム状態
+ */
 export function gameReducer(state: GameState, action: GameAction): GameState {
   switch (action.type) {
     case 'selectDifficulty':

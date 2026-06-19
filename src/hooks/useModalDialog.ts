@@ -19,7 +19,11 @@ function syncDialogOpenState(
   }
 }
 
-/** ネイティブ dialog 要素の開閉を open prop と同期するフック */
+/**
+ * ネイティブ dialog 要素の開閉を open prop と同期するフック。
+ * @param open - dialog を開くかどうか
+ * @returns dialog 要素に渡す ref コールバック
+ */
 export function useModalDialog(open: boolean) {
   const dialogRef = useRef<HTMLDialogElement | null>(null);
   const wasOpenRef = useRef(false);

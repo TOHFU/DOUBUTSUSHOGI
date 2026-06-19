@@ -7,7 +7,12 @@ import { isHumanTurn } from '@/hooks/game/useGamePhase';
 import type { GameAction } from '@/hooks/game/types';
 import type { Difficulty, GameState, PieceKind, Position } from '@/domain/game/types';
 
-/** 人間プレイヤー向けのゲーム操作コールバックを生成するフック */
+/**
+ * 人間プレイヤー向けのゲーム操作コールバックを生成するフック。
+ * @param state - 現在のゲーム状態
+ * @param dispatch - ゲームアクションの dispatch 関数
+ * @returns ゲーム操作コールバック群
+ */
 export function useGameActions(
   state: GameState,
   dispatch: Dispatch<GameAction>,
