@@ -21,7 +21,13 @@ const PIECE_VALUES: Record<PieceKind, number> = {
   chick: 150,
 };
 
-/** 指定プレイヤーが相手のライオンを次の手で取れるかどうかを判定する */
+/**
+ * 指定プレイヤーが相手のライオンを次の手で取れるかどうかを判定する。
+ * @param board - 判定対象の盤面
+ * @param attacker - 攻撃側プレイヤー
+ * @param defender - 防御側プレイヤー
+ * @returns 次の手でライオンを取れる場合 true
+ */
 function canPlayerCaptureLion(
   board: Board,
   attacker: Player,
@@ -55,14 +61,21 @@ function canPlayerCaptureLion(
   return false;
 }
 
-/** 2座標間のマンハッタン距離 */
+/**
+ * 2座標間のマンハッタン距離を返す。
+ * @param a - 始点座標
+ * @param b - 終点座標
+ * @returns マンハッタン距離
+ */
 function manhattan(a: Position, b: Position): number {
   return Math.abs(a.row - b.row) + Math.abs(a.col - b.col);
 }
 
 /**
  * hard 難易度向けに1手の評価スコアを算出する。
- * ライオン捕獲・駒得・自ライオン危険・相手ライオンへの接近を考慮する。
+ * @param state - 現在のゲーム状態
+ * @param move - 評価対象の手
+ * @returns 評価スコア（高いほど有利）
  */
 function scoreMove(state: GameState, move: Move): number {
   const target = getCell(state.board, move.to);
@@ -106,7 +119,9 @@ function scoreMove(state: GameState, move: Move): number {
 
 /**
  * hard 難易度の手番選択。
- * 全候補手を評価し、最高スコアの手からランダムに1手選ぶ。
+ * @param candidates - 合法手の候補一覧
+ * @param state - 現在のゲーム状態
+ * @returns 評価スコアが最も高い手のうち1手
  */
 export function hardMovePicker(candidates: Move[], state: GameState): Move {
   const scored = candidates.map((move) => ({

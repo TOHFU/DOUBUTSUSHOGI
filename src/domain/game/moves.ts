@@ -19,12 +19,21 @@ import {
 
 type Direction = { row: number; col: number };
 
-/** プレイヤー視点の前方方向を返す（blue=下、green=上） */
+/**
+ * プレイヤー視点の前方方向を返す。
+ * @param player - 対象プレイヤー
+ * @returns 方向ベクトル（blue=下、green=上）
+ */
 function forwardDirection(player: Player): Direction {
   return player === 'blue' ? { row: 1, col: 0 } : { row: -1, col: 0 };
 }
 
-/** 座標に方向ベクトルを加算する */
+/**
+ * 座標に方向ベクトルを加算する。
+ * @param position - 基準座標
+ * @param direction - 加算する方向
+ * @returns 加算後の座標
+ */
 function addDirection(position: Position, direction: Direction): Position {
   return {
     row: position.row + direction.row,
@@ -34,8 +43,9 @@ function addDirection(position: Position, direction: Direction): Position {
 
 /**
  * 駒種とプレイヤーに応じた移動方向の一覧を返す。
- * ライオンは前方+周囲8方向、ゾウは斜め4方向、キリンは前方+左右、
- * ヒヨコは前方1マス、ニワトリは斜め後ろを除く周囲6マス。
+ * @param kind - 駒の種類
+ * @param player - 駒の所有者
+ * @returns 移動可能な方向ベクトルの配列
  */
 function getMoveDirections(kind: PieceKind, player: Player): Direction[] {
   const forward = forwardDirection(player);
@@ -98,7 +108,13 @@ function getMoveDirections(kind: PieceKind, player: Player): Direction[] {
   }
 }
 
-/** 指定マスへ移動可能か（盤内かつ自駒でない）を判定する */
+/**
+ * 指定マスへ移動可能か（盤内かつ自駒でない）を判定する。
+ * @param board - 対象の盤面
+ * @param player - 移動するプレイヤー
+ * @param position - 移動先候補の座標
+ * @returns 移動可能であれば true
+ */
 function canMoveTo(
   board: Board,
   player: Player,
@@ -114,7 +130,9 @@ function canMoveTo(
 
 /**
  * 盤上の駒が移動可能なマス一覧を返す。
- * 空マスと相手駒のマスを含む。
+ * @param board - 対象の盤面
+ * @param from - 駒の現在位置
+ * @returns 移動可能な座標の配列（空マスと相手駒のマスを含む）
  */
 export function getMovesForPiece(
   board: Board,
@@ -131,7 +149,11 @@ export function getMovesForPiece(
     .filter((position) => canMoveTo(board, piece.owner, position));
 }
 
-/** 持ち駒を打てる空マスの一覧を返す */
+/**
+ * 持ち駒を打てる空マスの一覧を返す。
+ * @param board - 対象の盤面
+ * @returns 空マスの座標配列
+ */
 export function getDropMoves(board: Board): Position[] {
   const positions: Position[] = [];
 
@@ -150,7 +172,10 @@ export function getDropMoves(board: Board): Position[] {
 
 /**
  * 1手を盤面に適用した新しい盤面を返す。
- * 移動元を空にし、移動先に駒を配置する。成り判定も行う。
+ * @param board - 適用前の盤面
+ * @param move - 実行する手
+ * @param player - 手を指すプレイヤー
+ * @returns 手適用後の盤面
  */
 export function applyMove(board: Board, move: Move, player: Player): Board {
   let nextBoard = cloneBoard(board);
@@ -175,7 +200,12 @@ export function applyMove(board: Board, move: Move, player: Player): Board {
   return nextBoard;
 }
 
-/** 指定プレイヤーのライオンの位置を探索する。存在しない場合は null */
+/**
+ * 指定プレイヤーのライオンの位置を探索する。
+ * @param board - 対象の盤面
+ * @param player - 探索対象のプレイヤー
+ * @returns ライオンの座標。盤上にいなければ null
+ */
 export function findLion(board: Board, player: Player): Position | null {
   for (let row = 0; row < BOARD_ROWS; row += 1) {
     for (let col = 0; col < BOARD_COLS; col += 1) {
@@ -190,7 +220,12 @@ export function findLion(board: Board, player: Player): Position | null {
   return null;
 }
 
-/** 座標がリスト内に含まれるかどうかを判定する */
+/**
+ * 座標がリスト内に含まれるかどうかを判定する。
+ * @param position - 判定する座標
+ * @param list - 座標の一覧
+ * @returns 含まれていれば true
+ */
 export function isPositionInList(
   position: Position,
   list: Position[],

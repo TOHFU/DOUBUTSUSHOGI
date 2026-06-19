@@ -11,7 +11,9 @@ import type { GameState, Move } from '@/domain/game/types';
 
 /**
  * 1手を実行し、取り駒・手番交代・勝敗判定を反映した新しい状態を返す。
- * 勝者が確定した場合は結果フェーズへ遷移する。
+ * @param state - 手実行前のゲーム状態
+ * @param move - 実行する手
+ * @returns 手実行後のゲーム状態。勝者確定時は結果フェーズへ遷移する
  */
 export function executeMove(state: GameState, move: Move): GameState {
   const target = state.board[move.to.row]?.[move.to.col] ?? null;
@@ -51,7 +53,9 @@ export function executeMove(state: GameState, move: Move): GameState {
 
 /**
  * 持ち駒の打ち込みを含む手の実行。
- * 打ち駒の場合は持ち駒リストから消費する。
+ * @param state - 手実行前のゲーム状態
+ * @param move - 実行する手
+ * @returns 手実行後のゲーム状態。打ち駒の場合は持ち駒を消費する
  */
 export function applyMoveWithCapture(state: GameState, move: Move): GameState {
   const mover = state.currentPlayer;
