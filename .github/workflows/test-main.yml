@@ -40,6 +40,7 @@ jobs:
 
   visual:
     name: Visual regression tests
+    if: github.event_name == 'push'
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
