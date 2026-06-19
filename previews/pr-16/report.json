@@ -1,0 +1,12 @@
+{
+  "generatedAt": "2026-06-19T08:03:40.723Z",
+  "passed": true,
+  "cases": [
+    {
+      "status": "passed",
+      "testLabel": "HomePage.visual.test.tsx",
+      "snapshotLabel": "menu-screen-chromium-linux",
+      "referencePath": "src/components/__screenshots__/HomePage.visual.test.tsx/menu-screen-chromium-linux.png"
+    }
+  ]
+}
