@@ -21,7 +21,6 @@ export function useGameScreen() {
   return {
     ...controller,
     phase,
-    isScreenVisible,
     playfieldClassName: phase.isMenuOpen
       ? 'game-screen__playfield game-screen__playfield--menu-hidden'
       : 'game-screen__playfield',
