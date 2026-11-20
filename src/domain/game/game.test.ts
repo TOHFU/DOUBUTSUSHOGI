@@ -53,7 +53,7 @@ describe('game', () => {
   });
 
   it('ライオンを取ると勝利になる', () => {
-    const state = {
+    const state: GameState = {
       ...startGame(selectDifficulty(createInitialGameState(), 'easy')),
       board: [
         [null, null, null],
@@ -115,7 +115,7 @@ describe('game', () => {
   });
 
   it('持ち駒を盤に置くと手元から消える', () => {
-    const state = {
+    const state: GameState = {
       ...startGame(selectDifficulty(createInitialGameState(), 'easy')),
       board: [
         [null, null, null],
@@ -139,7 +139,7 @@ describe('game', () => {
   });
 
   it('持ち駒を一番下の行に置ける', () => {
-    const state = {
+    const state: GameState = {
       ...startGame(selectDifficulty(createInitialGameState(), 'easy')),
       board: [
         [null, null, null],
@@ -163,7 +163,7 @@ describe('game', () => {
   });
 
   it('持ち駒のひよこを相手陣地に置いても成らない', () => {
-    const state = {
+    const state: GameState = {
       ...startGame(selectDifficulty(createInitialGameState(), 'easy')),
       board: [
         [null, null, null],
@@ -196,7 +196,7 @@ describe('game', () => {
   });
 
   it('選択中の持ち駒を再度クリックすると選択解除される', () => {
-    const state = {
+    const state: GameState = {
       ...startGame(selectDifficulty(createInitialGameState(), 'easy')),
       captured: { blue: [], green: ['chick'] },
       currentPlayer: 'green' as const,
@@ -209,7 +209,7 @@ describe('game', () => {
   });
 
   it('持ち駒選択中に盤上の駒を選択できる', () => {
-    const state = {
+    const state: GameState = {
       ...startGame(selectDifficulty(createInitialGameState(), 'easy')),
       captured: { blue: [], green: ['chick'] },
       currentPlayer: 'green' as const,
